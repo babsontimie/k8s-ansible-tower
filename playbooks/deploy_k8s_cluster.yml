@@ -1,0 +1,29 @@
+---
+- name: Deploy Kubernetes Cluster
+  hosts: k8s_master
+  become: true
+  tasks:
+    - name: Initialize the Kubernetes master node
+      command: kubeadm init --pod-network-cidr=10.244.0.0/16
+      register: init_output
+      when: inventory_hostname == 'master1'
+
+    - name: Copy kubeconfig for kubectl access
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: ~/.kube/config
+        remote_src: yes
+      when: inventory_hostname == 'master1'
+
+    - name: Generate kubeadm join command for workers
+      debug:
+        msg: "{{ init_output.stdout_lines | select('search', 'kubeadm join') | list }}"
+
+- name: Join worker nodes to the Kubernetes cluster
+  hosts: k8s_workers
+  become: true
+  tasks:
+    - name: Join worker nodes to the Kubernetes cluster
+      command: "{{ hostvars['master1']['init_output']['stdout_lines'] | select('search', 'kubeadm join') | list | first }}"
+      when: inventory_hostname != 'master1'
+

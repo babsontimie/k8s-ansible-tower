@@ -1,0 +1,11 @@
+[k8s_master]
+master1 ansible_host=192.168.56.200
+
+[k8s_workers]
+worker1      ansible_host=192.168.56.201
+worker2      ansible_host=192.168.56.202
+
+[k8s_nodes:children]
+k8s_master
+k8s_workers
+

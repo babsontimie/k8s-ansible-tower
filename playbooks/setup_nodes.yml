@@ -1,0 +1,49 @@
+---
+- name: Install Kubernetes dependencies and Docker
+  hosts: k8s_nodes
+  become: true
+  tasks:
+    - name: Install required system packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Add Docker repository and install Docker
+      apt_repository:
+        repo: 'deb https://download.docker.com/linux/ubuntu{{ ansible_distribution_release | lower }} stable'
+        state: present
+        filename: docker.list
+
+    - name: Install Docker CE
+      apt:
+        name: docker-ce
+        state: latest
+
+    - name: Add Kubernetes apt repository
+      apt_repository:
+        repo: 'deb https://apt.kubernetes.io/kubernetes-xenial main'
+        state: present
+        filename: kubernetes.list
+
+    - name: Install Kubernetes packages
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: latest
+        update_cache: yes
+
+    - name: Hold Kubernetes packages to prevent upgrade
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: held
+

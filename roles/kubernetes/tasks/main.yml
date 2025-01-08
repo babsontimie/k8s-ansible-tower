@@ -1,0 +1,11 @@
+---
+- name: Install Kubernetes components (kubelet, kubeadm, kubectl)
+  apt:
+    name:
+      - kubelet
+      - kubeadm
+      - kubectl
+    state: latest
+    update_cache: yes
+  become: true
+
