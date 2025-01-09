@@ -6,14 +6,14 @@
     - name: Initialize the Kubernetes master node
       command: kubeadm init --pod-network-cidr=10.244.0.0/16
       register: init_output
-      when: inventory_hostname == 'master1'
+      when: inventory_hostname == 'kubermaster-ub'
 
     - name: Copy kubeconfig for kubectl access
       copy:
         src: /etc/kubernetes/admin.conf
         dest: ~/.kube/config
         remote_src: yes
-      when: inventory_hostname == 'master1'
+      when: inventory_hostname == 'kubermaster-ub'
 
     - name: Generate kubeadm join command for workers
       debug:
@@ -24,6 +24,5 @@
   become: true
   tasks:
     - name: Join worker nodes to the Kubernetes cluster
-      command: "{{ hostvars['master1']['init_output']['stdout_lines'] | select('search', 'kubeadm join') | list | first }}"
-      when: inventory_hostname != 'master1'
-
+      command: "{{ hostvars['kubermaster-ub']['init_output']['stdout_lines'] | select('search', 'kubeadm join') | list | first }}"
+      when: inventory_hostname != 'kubermaster-ub'
