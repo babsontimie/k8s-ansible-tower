@@ -1,0 +1,8 @@
+---
+- name: Join Kubernetes node to the cluster
+  hosts: k8s_workers
+  become: true
+  tasks:
+    - name: Join node to the Kubernetes cluster
+      command: kubeadm join --token {{ kube_token }} --discovery-token-ca-cert-hash {{ discovery_token_hash }}
+

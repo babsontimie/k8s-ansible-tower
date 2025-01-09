@@ -1,0 +1,18 @@
+---
+- name: Initialize Kubernetes master
+  hosts: k8s_master
+  become: true
+  tasks:
+    - name: Initialize kubeadm on master node
+      command: kubeadm init --pod-network-cidr=10.244.0.0/16
+      register: kubeadm_init_output
+
+    - name: Copy kubeconfig to user’s home directory
+      copy:
+        content: "{{ kubeadm_init_output.stdout }}"
+        dest: "/home/{{ ansible_user }}/.kube/config"
+      when: kubeadm_init_output.changed
+
+    - name: Install Flannel CNI plugin
+      command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+

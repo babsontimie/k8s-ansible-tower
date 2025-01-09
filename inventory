@@ -1,9 +1,9 @@
 [k8s_master]
-kubermaster-ub  ansible_host=192.168.56.200  ansible_ssh_user=root
+kubermaster-ub  ansible_host=192.168.56.200  ansible_ssh_user=teeadmin
 
 [k8s_workers]
-kubernode1-ub   ansible_host=192.168.56.201  ansible_ssh_user=root
-kubernode2-ub   ansible_host=192.168.56.202   ansible_ssh_user=root
+kubernode1-ub   ansible_host=192.168.56.201  ansible_ssh_user=teeadmin
+kubernode2-ub   ansible_host=192.168.56.202   ansible_ssh_user=teeadmin
 
 [k8s_nodes:children]
 k8s_master
