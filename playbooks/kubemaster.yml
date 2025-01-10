@@ -1,4 +1,5 @@
-- hosts: k8s_master
+- name: Applying the Kubermaster artefacts
+  hosts: k8s_master
   become: yes
   tasks:
     - name: Create an Empty file for Kubeadm configuring
