@@ -107,16 +107,22 @@
         enabled: yes
         daemon-reload: yes
 
+    #- name: Install Kubernetes components
+      #hosts: all
+      #become: yes
+      # tasks:
+    - name: Install Kubernetes components. Install apt-utils to avoid debconf warning
+      apt:
+        name: apt-utils
+        state: present
+
     - name: Install kubelet (with specific version)
       apt:
         name: "kubelet=1.29.*"
         state: present
         force: yes
         update_cache: yes
-        dpkg_options:
-          - "--force-confdef"
-          - "--force-confold"
-          - "--allow-downgrades"
+        dpkg_options: "--force-confdef --force-confold --allow-downgrades"
 
     - name: Install Kubeadm
       apt:
@@ -146,7 +152,7 @@
     - name: Reboot
       reboot:
 
-- hosts: master
+- hosts: k8s_master
   become: yes
   tasks:
     - name: Install Kubectl
