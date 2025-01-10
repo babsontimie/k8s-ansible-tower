@@ -129,6 +129,7 @@
           - "--force-confdef"
           - "--force-confold"
           - "--allow-downgrades"
+      become: yes
 
     - name: Install Kubeadm
       apt:
