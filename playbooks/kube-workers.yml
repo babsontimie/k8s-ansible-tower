@@ -12,19 +12,22 @@
     - name: Ensure docker service is started
       ansible.builtin.systemd:
         name: docker.service
-        state: started
+        daemon-reload: yes
+        state: restarted
         enabled: true
 
     - name: Ensure containerd service is started
       ansible.builtin.systemd:
         name: containerd.service
-        state: started
+        daemon-reload: yes
+        state: restarted
         enabled: true
 
     - name: Ensure kubelet service is started
       ansible.builtin.systemd:
         name: kubelet.service
-        state: started
+        daemon-reload: yes
+        state: restarted
         enabled: true
 
         
