@@ -9,7 +9,7 @@
         register: kube-services-items
 
     - name: Stop kube-services-items on worker nodes
-      systemd_service:
+      systemd:
         name: "{{ item }}"
         state: stopped
       with_items: kube-services-items.stdout_lines
