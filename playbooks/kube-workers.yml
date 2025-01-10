@@ -13,7 +13,7 @@
       lineinfile:
         path: "/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf"
         line: Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
-        insertafter: Environment=*
+        insertafter: Environment="KUBELET_EXTRA_ARGS.*
 
     - name: Ensure docker service is started
       ansible.builtin.systemd:
