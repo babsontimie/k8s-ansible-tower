@@ -9,12 +9,15 @@
           containerRuntime: remote
           containerRuntimeEndpoint: unix:///var/run/dockershim.sock  # for Docker
 
-    - name: Add extra args for kubeadm 
+
+    - name: Add extra args for kubeadm   
       lineinfile:
         path: "/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf"
+        regexp: "fail-swap-on=false"
+        state: present
+        insertbefore: EnvironmentFile=*
         line: Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
-        insertbefore: EnvironmentFile.*
-
+    
     - name: Ensure docker service is started
       ansible.builtin.systemd:
         name: docker.service
