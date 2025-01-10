@@ -4,7 +4,7 @@
   become: yes
   tasks:
     - name: Check listening ports for etcd and kube
-      shell: "netstat -tulpn | grep -E 'etcd|kube' | awk -F/ '{ print $2 }' | uniq"
+      shell: "netstat -tulpn | grep -E 'etcd|kube' | awk -F/ '{ print $2 }' |sort| uniq"
       register: result
       failed_when: result.rc != 0
       changed_when: false  # Don't mark the task as "changed" if no services are found
