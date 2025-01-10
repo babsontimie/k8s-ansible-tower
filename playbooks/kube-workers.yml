@@ -18,7 +18,7 @@
         insertafter: Environment="KUBELET_EXTRA_ARGS=*
         line: Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
         
-   - name: Reset Kubernetes component
+    - name: Reset Kubernetes component
       shell: "kubeadm reset --force --cri-socket=/var/run/{{ container_runtime }}/{{ container_runtime }}.sock"
       ignore_errors: True 
       
