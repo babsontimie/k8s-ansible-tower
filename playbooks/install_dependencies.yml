@@ -2,6 +2,10 @@
   hosts: all
   become: yes
   tasks:
+    - name: Clean apt cache
+      apt:
+        update_cache: yes
+
     - name: Updates
       apt:
         update_cache: yes
@@ -121,8 +125,10 @@
         name: "kubelet=1.29.*"
         state: present
         force: yes
-        update_cache: yes
-        dpkg_options: "--force-confdef --force-confold --allow-downgrades"
+        dpkg_options:
+          - "--force-confdef"
+          - "--force-confold"
+          - "--allow-downgrades"
 
     - name: Install Kubeadm
       apt:
