@@ -107,11 +107,13 @@
         enabled: yes
         daemon-reload: yes
 
-    - name: Install Kubelet
+    - name: Install kubelet
       apt:
-        name: kubelet=1.29.*
+        name: "kubelet=1.29.*"
         state: present
-        update_cache: true
+        force: yes  # This forces apt to go ahead with the package installation (including downgrades)
+        update_cache: yes
+        allow_downgrade: yes  # Allow downgrades during installation
 
     - name: Install Kubeadm
       apt:
