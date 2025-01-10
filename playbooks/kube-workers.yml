@@ -16,9 +16,9 @@
         enabled: yes          
         daemon-reload: yes
       loop:
-        - containers
-        -  docker
-        -  kubelet
+        - containerd
+        - docker
+        - kubelet
     
         
     - name: Retrieve Join Command
