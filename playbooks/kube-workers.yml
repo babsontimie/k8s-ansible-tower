@@ -2,6 +2,13 @@
   hosts: k8s_master
   become: yes
   tasks:
+    - name: Update container runtime remote
+      blockinfile:
+        path: /var/lib/kubelet/config.yaml
+        block: |
+          containerRuntime: remote
+          containerRuntimeEndpoint: unix:///var/run/dockershim.sock  # for Docker
+        
     - name: Retrieve Join Command
       shell: kubeadm token create --print-join-command
       register: join_command_raw
