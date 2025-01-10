@@ -1,0 +1,21 @@
+- name: Stopping all kubelet services
+  hosts: k8s_workers
+  become: yes
+  tasks:
+    - name: This command searches for the kube services to be stopped
+      shell: 
+        command: netstat -tulpn | grep -E 'etcd|kube'|awk -F"/"  '{ print  $2 }'|uniq
+        register: kube-services-items
+
+
+    - name: Stop kube-services-items on worker nodes
+      systemd_service:
+        name: "{{ item }}"
+        state: stopped
+      with_items: kube-services-items.stdout_lines
+
+
+
+
+
+
