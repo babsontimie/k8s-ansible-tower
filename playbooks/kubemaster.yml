@@ -1,4 +1,4 @@
-- hosts: master
+- hosts: k8s_master
   become: yes
   tasks:
     - name: Create an Empty file for Kubeadm configuring
@@ -30,7 +30,7 @@
           - pods
 
     - name: Initialize the cluster
-      shell: kubeadm init --config /etc/kubernetes/kubeadm-config.yaml >> cluster_initialized.log
+      shell: kubeadm init --config /etc/kubernetes/kubeadm-config.yaml --ignore-preflight-errors=FileAvailable >> cluster_initialized.log
       args:
         chdir: /home/teeadmin
         creates: cluster_initialized.log
