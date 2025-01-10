@@ -13,7 +13,7 @@
       systemd:
         name: “{{ item }}"
         state: restarted
-        enabled: yes          
+        enabled: yes
         daemon-reload: yes
       loop:
         - containerd
