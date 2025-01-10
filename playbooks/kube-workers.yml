@@ -18,26 +18,6 @@
         insertafter: Environment="KUBELET_EXTRA_ARGS=*
         line: Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
         
-    - name: Ensure docker service is started
-      ansible.builtin.systemd:
-        name: docker.service
-        daemon-reload: yes
-        state: restarted
-        enabled: true
-
-    - name: Ensure containerd service is started
-      ansible.builtin.systemd:
-        name: containerd.service
-        daemon-reload: yes
-        state: restarted
-        enabled: true
-
-    - name: Ensure kubelet service is started
-      ansible.builtin.systemd:
-        name: kubelet.service
-        daemon-reload: yes
-        state: restarted
-        enabled: true
 
         
     - name: Retrieve Join Command
