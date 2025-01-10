@@ -1,0 +1,18 @@
+---
+- name: Stopping all kubelet services
+  hosts: all
+  become: yes
+  tasks:
+    - name: Check listening ports for etcd and kube
+      shell: "netstat -tulpn | grep -E 'etcd|kube' | awk -F/ '{ print $2 }' | uniq"
+      register: result
+      failed_when: result.rc != 0
+      changed_when: false  # Don't mark the task as "changed" if no services are found
+
+    - name: Stop kube-services-items on worker nodes
+      systemd:
+        name: "{{ item }}"
+        state: stopped
+      with_items: "{{ result.stdout_lines | select('match', '.*') | list }}"  # Ensure only valid service names are used
+      when: result.stdout_lines | length > 0  # Only run this task if there are any services to stop
+      ignore_errors: yes  # If no matching services are found, continue without error
