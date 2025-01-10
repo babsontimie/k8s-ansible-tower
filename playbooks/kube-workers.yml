@@ -11,7 +11,7 @@
 
     - name: Enable docker, containerd, kubelet services and restart
       systemd:
-        name: “{{ item }}
+        name: “{{ item }}"
         state: restarted
         enabled: yes          
         daemon-reload: yes
