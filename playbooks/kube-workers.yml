@@ -18,14 +18,6 @@
         state: present
         insertafter: Environment="KUBELET_EXTRA_ARGS=*
         line: Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
-        
-    - name: get remote certificate
-      shell: >-
-        openssl s_client -showcerts -connect {{ remotehost }} |
-        openssl x509 -outform PEM > ca.crt
-      args:
-        creates: ca.crt
-      register: remotecert
       
         
     - name: Retrieve Join Command
