@@ -5,13 +5,13 @@
   tasks:
     - name: This command searches for the kube services to be stopped
       command: netstat -tulpn | grep -E 'etcd|kube'|awk -F"/"  '{ print  $2 }'|uniq
-      register: kube-services-items
+      register: kube_services_items
 
     - name: Stop kube-services-items on worker nodes
       systemd:
         name: "{{ item }}"
         state: stopped
-      with_items: kube-services-items.stdout_lines
+      with_items: kube_services_items.stdout_lines
 
 
 
