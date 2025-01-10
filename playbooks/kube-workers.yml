@@ -15,7 +15,7 @@
         path: "/usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf"
         regexp: "fail-swap-on=false"
         state: present
-        insertafter: Environment=*
+        insertafter: Environment="KUBELET_EXTRA_ARGS=*
         line: Environment="KUBELET_EXTRA_ARGS=--fail-swap-on=false"
     
     - name: Ensure docker service is started
