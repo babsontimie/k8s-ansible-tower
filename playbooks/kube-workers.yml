@@ -8,6 +8,18 @@
         block: |
           containerRuntime: remote
           containerRuntimeEndpoint: unix:///var/run/dockershim.sock  # for Docker
+
+    - name: Enable docker, containerd, kubelet services and restart
+      systemd:
+        name: “{{  items }}
+        state: restarted
+        enabled: yes          
+        daemon-reload: yes
+      loop:
+        - containers
+        -  docker
+        -  kubelet
+    
         
     - name: Retrieve Join Command
       shell: kubeadm token create --print-join-command
