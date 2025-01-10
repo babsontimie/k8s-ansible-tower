@@ -120,21 +120,14 @@
         name: apt-utils
         state: present
 
-    - name: Install kubelet (with specific version)
+    - name: Install kubeadm, kubelet, and kubectl
       apt:
-        name: "kubelet=1.29.*"
+        name: "{{ item }}"
         state: present
-        force: yes
-        dpkg_options:
-          - "--force-confdef"
-          - "--force-confold"
-          - "--allow-downgrades"
-      become: yes
-
-    - name: Install Kubeadm
-      apt:
-        name: kubeadm=1.29.*
-        state: present
+      loop:
+        - kubeadm
+        - kubelet
+        - kubectl
 
     - name: Enable the Kubelet service
       service:
@@ -159,11 +152,3 @@
     - name: Reboot
       reboot:
 
-- hosts: k8s_master
-  become: yes
-  tasks:
-    - name: Install Kubectl
-      apt:
-        name: kubectl=1.29.*
-        state: present
-        force: yes
