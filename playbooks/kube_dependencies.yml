@@ -5,11 +5,12 @@
     - name: Updates
       apt:
         update_cache: yes
-
-    - name: Updates
+     
+    - name: Ensure python3-pip is installed
       apt:
         name: python3-pip
-        status: present        
+        state: present
+        update_cache: yes
 
     - name: Reboot
       reboot:
