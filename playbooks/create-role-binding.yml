@@ -1,0 +1,12 @@
+---
+- name: Create RoleBinding for kubernetes-admin in kube-system
+  hosts: k8s_master
+  tasks:
+    - name: Create rolebinding for kubernetes-admin
+      command: >
+        kubectl create rolebinding kubernetes-admin-role-binding
+        --role=admin
+        --user=kubernetes-admin
+        --namespace=kube-system
+      become: yes
+      become_user: root
