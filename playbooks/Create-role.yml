@@ -1,0 +1,22 @@
+---
+- name: Create Kubernetes Role in a Namespace
+  hosts: k8s_master
+  gather_facts: no
+  tasks:
+    - name: Create a Role in a Namespace
+      kubernetes.core.k8s:
+        kubeconfig: "~/.kube/config"  # Optional: specify your kubeconfig path if different
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: Role
+          metadata:
+            name: my-role
+            namespace: my-namespace  # Replace with your namespace
+          rules:
+            - apiGroups: [""]
+              resources: ["pods"]
+              verbs: ["get", "list", "create", "delete"]
+            - apiGroups: ["apps"]
+              resources: ["deployments"]
+              verbs: ["get", "list", "create", "update"]
