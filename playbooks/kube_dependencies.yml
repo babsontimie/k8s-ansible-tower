@@ -6,6 +6,11 @@
       apt:
         update_cache: yes
 
+    - name: Updates
+      apt:
+        name: python3-pip
+        status: present        
+
     - name: Reboot
       reboot:
 
