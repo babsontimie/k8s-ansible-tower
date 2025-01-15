@@ -1,15 +1,42 @@
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  # Make sure this matches your use case, you can name it "kubernetes-admin" or something else
-  name: kubernetes-admin
-rules:
-  - apiGroups: [""]
-    resources: ["users"]
-    verbs: ["impersonate"]
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["rolebindings"]
-    verbs: ["create", "get", "list", "update", "delete"]
-  - apiGroups: ["rbac.authorization.k8s.io"]
-    resources: ["roles"]
-    verbs: ["create", "get", "list", "update", "delete"]
+---
+- name: Create Kubernetes ClusterRole and ClusterRoleBinding
+  hosts: k8s_master
+  gather_facts: no
+  tasks:
+    - name: Create ClusterRole for impersonation permissions
+      kubernetes.core.k8s:
+        kubeconfig: "~/.kube/config"  # Optional, specify your kubeconfig path if different
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRole
+          metadata:
+            name: kubernetes-admin
+          rules:
+            - apiGroups: [""]
+              resources: ["users"]
+              verbs: ["impersonate"]
+            - apiGroups: ["rbac.authorization.k8s.io"]
+              resources: ["rolebindings"]
+              verbs: ["create", "get", "list", "update", "delete"]
+            - apiGroups: ["rbac.authorization.k8s.io"]
+              resources: ["roles"]
+              verbs: ["create", "get", "list", "update", "delete"]
+
+    - name: Create ClusterRoleBinding for kubernetes-admin user
+      kubernetes.core.k8s:
+        kubeconfig: "~/.kube/config"  # Optional, specify your kubeconfig path if different
+        state: present
+        definition:
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRoleBinding
+          metadata:
+            name: kubernetes-admin-binding
+          subjects:
+            - kind: User
+              name: kubernetes-admin  # Ensure this matches the actual username of your admin
+              apiGroup: rbac.authorization.k8s.io
+          roleRef:
+            kind: ClusterRole
+            name: kubernetes-admin
+            apiGroup: rbac.authorization.k8s.io
