@@ -1,22 +1,23 @@
----
-- name: Create Kubernetes ClusterRole and ClusterRoleBinding
+- name: Create ClusterRoleBinding for kubernetes-admin
   hosts: k8s_master
   gather_facts: no
   tasks:
-    - name: Create ClusterRoleBinding for kubernetes-admin user
-      kubernetes.core.k8s:
-        kubeconfig: "~/.kube/config"  # Optional, specify your kubeconfig path if different
+    - name: Bind kubernetes-admin to cluster-admin role
+      k8s:
+        api_version: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        name: kubernetes-admin-clusterrolebinding
         state: present
         definition:
           apiVersion: rbac.authorization.k8s.io/v1
           kind: ClusterRoleBinding
           metadata:
-            name: kubernetes-admin-binding
+            name: kubernetes-admin-clusterrolebinding
           subjects:
             - kind: User
-              name: kubernetes-admin  # Ensure this matches the actual username of your admin
+              name: kubernetes-admin  # The user you're granting permissions to
               apiGroup: rbac.authorization.k8s.io
           roleRef:
             kind: ClusterRole
-            name: kubernetes-admin
+            name: cluster-admin  # Grants full cluster-wide admin rights
             apiGroup: rbac.authorization.k8s.io
