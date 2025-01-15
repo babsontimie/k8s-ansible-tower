@@ -4,7 +4,8 @@
   gather_facts: no
   tasks:
     - name: Create ClusterRole for impersonation permissions
-      kubernetes.core.k8s:
+      #kubernetes.core.k8s:
+      k8s
         kubeconfig: "~/.kube/config"  # Optional, specify your kubeconfig path if different
         state: present
         definition:
