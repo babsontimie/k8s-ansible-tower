@@ -1,25 +1,40 @@
----
-- name: Create Kubernetes ClusterRole and ClusterRoleBinding
+- name: Create ClusterRole with full admin permissions
   hosts: k8s_master
   gather_facts: no
   tasks:
-    - name: Create ClusterRole for impersonation permissions
-      #kubernetes.core.k8s:
+    - name: Create a custom ClusterRole with full admin permissions (similar to cluster-admin)
       k8s:
-        kubeconfig: "~/.kube/config"  # Optional, specify your kubeconfig path if different
+        api_version: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        name: full-admin
         state: present
         definition:
           apiVersion: rbac.authorization.k8s.io/v1
           kind: ClusterRole
           metadata:
-            name: kubernetes-admin
+            name: full-admin
           rules:
             - apiGroups: [""]
-              resources: ["users"]
-              verbs: ["impersonate"]
+              resources: ["pods", "services", "endpoints", "namespaces", "nodes", "replicationcontrollers", "secrets", "configmaps", "persistentvolumes", "persistentvolumeclaims", "events", "limitranges", "resourcequotas"]
+              verbs: ["*"]
+            - apiGroups: ["apps"]
+              resources: ["deployments", "statefulsets", "daemonsets", "replicasets", "controllerrevisions"]
+              verbs: ["*"]
             - apiGroups: ["rbac.authorization.k8s.io"]
-              resources: ["rolebindings"]
-              verbs: ["create", "get", "list", "update", "delete"]
-            - apiGroups: ["rbac.authorization.k8s.io"]
-              resources: ["roles"]
-              verbs: ["create", "get", "list", "update", "delete"]
+              resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"]
+              verbs: ["*"]
+            - apiGroups: ["batch"]
+              resources: ["jobs", "cronjobs"]
+              verbs: ["*"]
+            - apiGroups: ["extensions"]
+              resources: ["deployments", "replicasets", "daemonsets"]
+              verbs: ["*"]
+            - apiGroups: ["networking.k8s.io"]
+              resources: ["networkpolicies"]
+              verbs: ["*"]
+            - apiGroups: ["storage.k8s.io"]
+              resources: ["storageclasses", "persistentvolumes"]
+              verbs: ["*"]
+            - apiGroups: ["coordination.k8s.io"]
+              resources: ["leases"]
+              verbs: ["*"]
