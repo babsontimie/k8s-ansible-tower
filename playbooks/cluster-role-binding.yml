@@ -1,0 +1,11 @@
+---
+- name: Create ClusterRoleBinding for kubernetes-admin
+  hosts: k8s_master
+  tasks:
+    - name: Create clusterrolebinding for kubernetes-admin
+      command: >
+        kubectl create clusterrolebinding kubernetes-admin-binding
+        --clusterrole=cluster-admin
+        --user=kubernetes-admin
+      become: yes
+      become_user: root
