@@ -2,11 +2,21 @@
 - name: Create RoleBinding for kubernetes-admin in kube-system
   hosts: k8s_master
   tasks:
-    - name: Create rolebinding for kubernetes-admin
-      command: >
-        kubectl create rolebinding kubernetes-admin-role-binding
-        --role=admin
-        --user=kubernetes-admin
-        --namespace=kube-system
-      become: yes
-      become_user: root
+    - name: Create rolebinding for kubernetes-admin using k8s module
+      k8s:
+        kubeconfig: "~/.kube/config"  # Adjust the path to your kubeconfig if necessary
+        state: present
+        definition:
+          kind: RoleBinding
+          apiVersion: rbac.authorization.k8s.io/v1
+          metadata:
+            name: kubernetes-admin-role-binding
+            namespace: kube-system
+          roleRef:
+            kind: Role
+            name: admin
+            apiGroup: rbac.authorization.k8s.io
+          subjects:
+            - kind: User
+              name: kubernetes-admin
+              apiGroup: rbac.authorization.k8s.io
