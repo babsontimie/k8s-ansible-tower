@@ -12,7 +12,7 @@
           kind: Role
           metadata:
             name: my-role
-            namespace: my-namespace  # Replace with your namespace
+            namespace: default  # Replace with your namespace
           rules:
             - apiGroups: [""]
               resources: ["pods"]
